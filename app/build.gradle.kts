@@ -65,10 +65,14 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     kapt(libs.hilt.compiler)
 
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
     //room
-    implementation("androidx.room:room-runtime:2.6.0")
-    implementation("androidx.room:room-ktx:2.6.0")
-    kapt("androidx.room:room-compiler:2.6.0")
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
 
     //navigation compose
     implementation(libs.androidx.navigation.compose)

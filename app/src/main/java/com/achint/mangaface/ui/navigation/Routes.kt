@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 object SignIn
 
 @Serializable
-object Home
+object Manga

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.achint.mangaface.ui.screens.home.HomeScreenRoot
+import com.achint.mangaface.ui.screens.manga.MangaScreenRoot
 import com.achint.mangaface.ui.screens.signin.SignInScreenRoot
 
 @Composable
@@ -12,12 +12,12 @@ fun AppNavHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = SignIn) {
         composable<SignIn> {
             SignInScreenRoot(navigateToHome = {
-                navController.navigate(Home)
+                navController.navigate(Manga)
             })
         }
 
-        composable<Home> {
-            HomeScreenRoot()
+        composable<Manga> {
+            MangaScreenRoot()
         }
     }
 }
