@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
+    implementation (libs.androidx.room.paging)
 
     //navigation compose
     implementation(libs.androidx.navigation.compose)
@@ -81,6 +82,16 @@ dependencies {
     //kotlinx serializable
     implementation(libs.kotlinx.serialization.json)
 
+    //datastore preferences
+    implementation(libs.androidx.datastore.preferences)
+
+    //coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
+    //paging
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
 }
 
 kapt {

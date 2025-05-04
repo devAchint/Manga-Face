@@ -8,12 +8,14 @@ import com.achint.mangaface.ui.screens.manga.MangaScreenRoot
 import com.achint.mangaface.ui.screens.signin.SignInScreenRoot
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = SignIn) {
+fun AppNavHost(navController: NavHostController, userSignedIn: Boolean = false) {
+    NavHost(navController = navController, startDestination = if (userSignedIn) Manga else SignIn) {
         composable<SignIn> {
-            SignInScreenRoot(navigateToHome = {
-                navController.navigate(Manga)
-            })
+            SignInScreenRoot(
+                navigateToHome = {
+                    navController.navigate(Manga)
+                }
+            )
         }
 
         composable<Manga> {

@@ -32,9 +32,8 @@ fun SignInScreenRoot(
         authUiState = viewModel.authUiState.collectAsState().value,
         onEmailChange = viewModel::setEmail,
         onPasswordChange = viewModel::setPassword,
-        signIn = viewModel::signIn,
+        signIn = viewModel::authenticate,
         navigateToHome = navigateToHome,
-        onMessageShown = viewModel::resetMsg
     )
 }
 
@@ -46,12 +45,20 @@ fun SignInScreen(
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     navigateToHome: () -> Unit = {},
-    onMessageShown: () -> Unit = {},
-    signIn: (email: String, password: String) -> Unit = { _, _ -> }
+    signIn: () -> Unit = {  }
 ) {
-    LaunchedEffect(authUiState.signInSuccess) {
-        if (authUiState.signInSuccess) {
-            navigateToHome()
+    LaunchedEffect(authUiState.signInState) {
+        when(authUiState.signInState) {
+            SignInStates.InvalidCredentials -> {
+
+            }
+            SignInStates.Success -> {
+                navigateToHome()
+            }
+            SignInStates.Fail -> {
+
+            }
+            null -> {}
         }
     }
     Scaffold(
@@ -89,12 +96,8 @@ fun SignInScreen(
                     Toast.makeText(context, "Password is not valid", Toast.LENGTH_SHORT).show()
                     return@LoadingButton
                 }
-                signIn(authUiState.email, authUiState.password)
+                signIn()
             }
-        }
-        authUiState.msg?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-            onMessageShown()
         }
     }
 }

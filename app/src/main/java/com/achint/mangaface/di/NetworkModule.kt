@@ -1,5 +1,6 @@
 package com.achint.mangaface.di
 
+import android.util.Log
 import com.achint.mangaface.data.remote.ApiInterface
 import dagger.Module
 import dagger.Provides
@@ -19,8 +20,11 @@ class NetworkModule() {
     @Provides
     fun providesOkHttpClient(): OkHttpClient {
         val headerInterceptor = Interceptor { chain ->
+            Log.d("MYDEBUG", "${chain.request().url}")
             val request = chain.request().newBuilder()
-                .addHeader("x-rapidapi-key", "cb85ce1a1cmsh588514d9f0c2206p17bc57jsnc7feb5b73b69")
+                //23faf46033msh6c913195d8814a8p1c67cfjsnb48067f6db09
+                //cb85ce1a1cmsh588514d9f0c2206p17bc57jsnc7feb5b73b69
+                .addHeader("x-rapidapi-key", "23faf46033msh6c913195d8814a8p1c67cfjsnb48067f6db09")
                 .build()
             chain.proceed(request)
         }
