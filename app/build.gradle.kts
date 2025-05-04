@@ -73,7 +73,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
-    implementation (libs.androidx.room.paging)
+    implementation(libs.androidx.room.paging)
 
     //navigation compose
     implementation(libs.androidx.navigation.compose)
@@ -92,6 +92,18 @@ dependencies {
     //paging
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+
+    //camera
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.extensions)
+
+    //tasks vision
+    implementation (libs.tasks.vision)
+
 }
 
 kapt {

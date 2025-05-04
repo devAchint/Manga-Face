@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.achint.mangaface.ui.screens.face.FaceScreen
+import com.achint.mangaface.ui.screens.face.FaceScreenRoot
 import com.achint.mangaface.ui.screens.manga.MangaScreenRoot
 import com.achint.mangaface.ui.screens.signin.SignInScreenRoot
 
@@ -20,6 +22,10 @@ fun AppNavHost(navController: NavHostController, userSignedIn: Boolean = false) 
 
         composable<Manga> {
             MangaScreenRoot()
+        }
+
+        composable<Face> {
+            FaceScreenRoot()
         }
     }
 }

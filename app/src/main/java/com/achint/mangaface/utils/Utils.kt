@@ -1,6 +1,7 @@
 package com.achint.mangaface.utils
 
 
+
 fun String.isValidEmail(): Boolean {
     return isNotBlank() && contains("@") && contains(".")
 }

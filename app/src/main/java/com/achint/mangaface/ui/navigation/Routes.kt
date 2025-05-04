@@ -11,4 +11,6 @@ object SignIn{
 object Manga
 
 @Serializable
-object Face
+object Face{
+    const val route="face"
+}
