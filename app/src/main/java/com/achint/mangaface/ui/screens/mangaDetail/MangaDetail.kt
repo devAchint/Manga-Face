@@ -2,6 +2,7 @@ package com.achint.mangaface.ui.screens.mangaDetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -22,12 +28,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.achint.mangaface.R
 import com.achint.mangaface.domain.model.MangaModel
 import com.achint.mangaface.ui.components.LoadingButton
+import com.achint.mangaface.ui.theme.LightTextColor
+import com.achint.mangaface.ui.theme.PrimaryColor
+import com.achint.mangaface.ui.theme.nunFontFamily
+import com.achint.mangaface.utils.toTitleCase
+import java.util.Locale
 
 @Composable
 fun MangaDetailScreenRoot(modifier: Modifier = Modifier) {
@@ -82,24 +95,66 @@ fun MangaDetailScreen(
                     .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                     .background(Color.White)
                     .weight(1f)
-                    .padding(16.dp)
+                    .padding(top = 20.dp, start = 20.dp, bottom = 12.dp, end = 20.dp)
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(text = manga.type)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .background(PrimaryColor, shape = CircleShape)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = manga.type.toTitleCase())
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = manga.title.trim(), fontSize = 24.sp)
+                    LazyRow {
+                        items(manga.genres) {
+                            Text(
+                                text = it, modifier = Modifier
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .background(
+                                        Color(0xfffafafa)
+                                    )
+                                    .padding(horizontal = 10.dp, vertical = 4.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = manga.title.trim(),
+                        fontSize = 24.sp,
+                        fontFamily = nunFontFamily,
+                        fontWeight = FontWeight.Bold
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
                     Row {
-                        Text(text = "${manga.total_chapter} chapters")
+                        Text(
+                            text = "${manga.total_chapter} chapters",
+                            fontFamily = nunFontFamily,
+                            fontWeight = FontWeight.Normal,
+                            color = LightTextColor
+                        )
                         val author =
                             manga.authors.firstOrNull()?.takeIf { it.isNotBlank() } ?: "Unknown"
-                        Text(text = "│ by $author")
+                        Text(
+                            text = "│ by $author",
+                            fontFamily = nunFontFamily,
+                            fontWeight = FontWeight.Medium
+                        )
 
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = manga.summary)
+                    Text(
+                        text = manga.summary,
+                        fontFamily = nunFontFamily,
+                        fontWeight = FontWeight.Normal,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
-                LoadingButton()
+                LoadingButton(text = "Read Now")
             }
         }
     }

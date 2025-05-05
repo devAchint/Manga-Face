@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.achint.mangaface.ui.navigation.Face
 import com.achint.mangaface.ui.navigation.Manga
+import com.achint.mangaface.ui.screens.mangaDetail.MangaDetailScreenRoot
 import com.achint.mangaface.ui.screens.signin.AuthViewModel
 import com.achint.mangaface.ui.screens.signin.SignInScreenRoot
 import com.achint.mangaface.ui.theme.MangaFaceTheme
@@ -67,8 +68,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) {
-                    //  MangaDetailScreenRoot()
-                    SignInScreenRoot()
+                      MangaDetailScreenRoot()
+                   // SignInScreenRoot()
 //                    val signInState = viewModel.authUiState.collectAsState().value.signInState
 //                    AppNavHost(
 //                        navController = navController,
