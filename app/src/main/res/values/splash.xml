@@ -2,8 +2,8 @@
 <resources>
 
     <style name="Theme.MyApp.MySplash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/white</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_background</item>
+        <item name="windowSplashScreenBackground">#FE7743</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.MangaFace</item>
     </style>
 </resources>

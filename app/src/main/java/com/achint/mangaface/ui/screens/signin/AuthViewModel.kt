@@ -6,6 +6,7 @@ import com.achint.mangaface.domain.repository.UsersRepository
 import com.achint.mangaface.utils.isValidEmail
 import com.achint.mangaface.utils.isValidPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,8 +20,8 @@ enum class SignInStates {
 data class AuthUiState(
     val email: String = "",
     val password: String = "",
-    val isValidEmail: Boolean = false,
-    val isValidPassword: Boolean = false,
+    val isValidEmail: Boolean? = null,
+    val isValidPassword: Boolean? = null,
     val isLoading: Boolean = false,
     val signInState: SignInStates? = null
 )
@@ -35,17 +36,18 @@ class AuthViewModel @Inject constructor(private val usersRepository: UsersReposi
     init {
         viewModelScope.launch {
             val isSignedIn = usersRepository.isUserSignedIn()
-            _authUiState.update { it.copy(
-                signInState = if (isSignedIn) SignInStates.Success else null
-            )}
+            _authUiState.update {
+                it.copy(
+                    signInState = if (isSignedIn) SignInStates.Success else null
+                )
+            }
         }
     }
 
     fun setEmail(email: String) {
         _authUiState.update {
             it.copy(
-                email = email,
-                isValidEmail = email.isValidEmail()
+                email = email
             )
         }
     }
@@ -53,8 +55,7 @@ class AuthViewModel @Inject constructor(private val usersRepository: UsersReposi
     fun setPassword(password: String) {
         _authUiState.update {
             it.copy(
-                password = password,
-                isValidPassword = password.isValidPassword()
+                password = password
             )
         }
     }
@@ -62,12 +63,22 @@ class AuthViewModel @Inject constructor(private val usersRepository: UsersReposi
 
     fun authenticate() {
         viewModelScope.launch {
-            _authUiState.update { it.copy(isLoading = true) }
-            val isUserAlreadyExists = usersRepository.isUserAlreadyExists(authUiState.value.email)
-            if (isUserAlreadyExists) {
-                signIn()
-            } else {
-                signUp()
+            _authUiState.update {
+                it.copy(
+                    isValidEmail = authUiState.value.email.isValidEmail(),
+                    isValidPassword = authUiState.value.password.isValidPassword()
+                )
+            }
+            if (authUiState.value.isValidEmail == true && authUiState.value.isValidPassword == true) {
+                _authUiState.update { it.copy(isLoading = true) }
+                delay(5000)
+                val isUserAlreadyExists =
+                    usersRepository.isUserAlreadyExists(authUiState.value.email)
+                if (isUserAlreadyExists) {
+                    signIn()
+                } else {
+                    signUp()
+                }
             }
         }
     }

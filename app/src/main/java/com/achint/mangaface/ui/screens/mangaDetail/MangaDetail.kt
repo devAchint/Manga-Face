@@ -3,6 +3,7 @@ package com.achint.mangaface.ui.screens.mangaDetail
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,12 +22,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.achint.mangaface.R
 import com.achint.mangaface.domain.model.MangaModel
-import com.achint.mangaface.ui.screens.manga.MangaScreenRoot
+import com.achint.mangaface.ui.components.LoadingButton
 
 @Composable
 fun MangaDetailScreenRoot(modifier: Modifier = Modifier) {
@@ -83,19 +84,23 @@ fun MangaDetailScreen(
                     .weight(1f)
                     .padding(16.dp)
             ) {
-                Text(text = manga.type)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = manga.title.trim(), fontSize = 24.sp)
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(text = manga.summary)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = manga.type)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = manga.title.trim(), fontSize = 24.sp)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row {
+                        Text(text = "${manga.total_chapter} chapters")
+                        val author =
+                            manga.authors.firstOrNull()?.takeIf { it.isNotBlank() } ?: "Unknown"
+                        Text(text = "│ by $author")
 
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = manga.summary)
+                }
+                LoadingButton()
             }
         }
     }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun MangaDetailPreview() {
-    MangaScreenRoot()
 }
