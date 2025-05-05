@@ -7,12 +7,21 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import com.achint.mangaface.ui.theme.nunFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Toolbar(modifier: Modifier = Modifier, title: String) {
     TopAppBar(
-        title = { Text(title, color = Color.White) },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black)
+        title = {
+            Text(
+                title,
+                color = Color.Black,
+                fontFamily = nunFontFamily,
+                fontWeight = FontWeight.Medium
+            )
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
     )
 }

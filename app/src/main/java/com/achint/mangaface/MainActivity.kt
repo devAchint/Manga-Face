@@ -15,15 +15,19 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.achint.mangaface.ui.navigation.AppNavHost
 import com.achint.mangaface.ui.navigation.Face
 import com.achint.mangaface.ui.navigation.Manga
+import com.achint.mangaface.ui.screens.manga.MangaScreenRoot
 import com.achint.mangaface.ui.screens.mangaDetail.MangaDetailScreenRoot
 import com.achint.mangaface.ui.screens.signin.AuthViewModel
 import com.achint.mangaface.ui.screens.signin.SignInScreenRoot
+import com.achint.mangaface.ui.screens.signin.SignInStates
 import com.achint.mangaface.ui.theme.MangaFaceTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,13 +72,14 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) {
-                      MangaDetailScreenRoot()
+                      //MangaDetailScreenRoot()
+                    //MangaScreenRoot()
                    // SignInScreenRoot()
-//                    val signInState = viewModel.authUiState.collectAsState().value.signInState
-//                    AppNavHost(
-//                        navController = navController,
-//                        userSignedIn = signInState == SignInStates.Success
-//                    )
+                    val signInState = viewModel.authUiState.collectAsState().value.signInState
+                    AppNavHost(
+                        navController = navController,
+                        userSignedIn = signInState == SignInStates.Success
+                    )
                 }
             }
         }

@@ -3,6 +3,7 @@
 package com.achint.mangaface.ui.screens.face
 
 import android.content.Context
+import android.graphics.Rect
 import android.graphics.RectF
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -86,6 +87,13 @@ fun Overlay(faceBounds: RectF?) {
             style = Stroke(width = 3f)
         )
 
+        drawRect(
+            color = Color.Blue,
+            topLeft = Offset(faceBounds.left, faceBounds.top),
+            size = Size(faceBounds.width(), faceBounds.height()),
+            style = Stroke(width = 10f)
+        )
+
     }
 
 }
@@ -143,23 +151,27 @@ fun FaceScreen(modifier: Modifier = Modifier) {
             for (detection in it.results[0].detections()) {
                 val box = detection.boundingBox()
 
-                // Image size used by MediaPipe (replace with actual if known)
                 val imageWidth = 480f
                 val imageHeight = 640f
 
-                // Get canvas size
                 val canvasWidth = context.resources.displayMetrics.widthPixels.toFloat()
                 val canvasHeight = context.resources.displayMetrics.heightPixels.toFloat()
 
-                // Flip X because front camera is mirrored
-                val mappedLeft = canvasWidth - (box.right / imageWidth * canvasWidth)
-                val mappedRight = canvasWidth - (box.left / imageWidth * canvasWidth)
+                // No flipping
+                val mappedLeft = box.left / imageWidth * canvasWidth
+                val mappedRight = box.right / imageWidth * canvasWidth
 
                 val mappedTop = box.top / imageHeight * canvasHeight
                 val mappedBottom = box.bottom / imageHeight * canvasHeight
 
-                faceBounds.value = RectF(mappedLeft, mappedTop, mappedRight, mappedBottom)
+                faceBounds.value = RectF(
+                    mappedLeft.toFloat(),
+                    mappedTop,
+                    mappedRight,
+                    mappedBottom
+                )
             }
+
 
         }
     }
