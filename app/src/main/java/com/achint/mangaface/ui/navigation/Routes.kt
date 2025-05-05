@@ -3,14 +3,13 @@ package com.achint.mangaface.ui.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-object SignIn{
-    const val route="sign_in"
-}
+object SignIn
 
 @Serializable
 object Manga
 
 @Serializable
-object Face{
-    const val route="face"
-}
+object MangaDetail
+
+@Serializable
+object Face

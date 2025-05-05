@@ -2,6 +2,7 @@ package com.achint.mangaface.ui.screens.manga
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -19,6 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,13 +32,38 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.achint.mangaface.domain.model.MangaModel
 
 @Composable
 fun MangaScreenRoot(modifier: Modifier = Modifier, viewModel: MangaViewModel = hiltViewModel()) {
     MangaScreen(mangas = viewModel.mangaFlow.collectAsLazyPagingItems())
+//    val imageUrl =
+//        "https://usc1.contabostorage.com/scraper/mangas/65a52ea8f64a55128b487e1b/thumb.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=c10e9464b360c31ce8abea9b266076f6%2F20250505%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250505T144447Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=b715d999ff13d8d3b677e33cf415c5d34188828a6386a0767f5c8b41909c0675"
+//
+//    AsyncImage(
+//        model = ImageRequest.Builder(LocalContext.current)
+//            .data(imageUrl)
+//            .crossfade(true)
+//            .listener(
+//                onError = { request, result ->
+//                    Log.e("MYDEBUG", "Image load failed: ${result.throwable.message}")
+//                },
+//                onSuccess = { request, metadata ->
+//                    Log.d("MYDEBUG", "Image load succeeded")
+//                }
+//            )
+//            .build(),
+//
+//        contentDescription = null,
+//        contentScale = ContentScale.Crop,
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(200.dp)
+//            .border(1.dp, Color.Black)
+//    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,14 +73,15 @@ fun MangaScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("home") })
+            TopAppBar(title = { Text("Manga") })
         }
     ) { innerPadding ->
         val context = LocalContext.current
         LaunchedEffect(mangas.loadState) {
             if (mangas.loadState.refresh is LoadState.Error) {
                 val error = (mangas.loadState.refresh as LoadState.Error).error
-                Toast.makeText(context, "Error: ${error.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Error: ${error.localizedMessage}", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -106,9 +136,11 @@ fun MangaGridItem(mangaModel: MangaModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
+                .background(Color.Black)
+                .clip(RoundedCornerShape(8.dp))
         )
 
-        Text(text = mangaModel.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(text = mangaModel.title, maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
 }
 

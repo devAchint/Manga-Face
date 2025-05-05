@@ -102,7 +102,10 @@ dependencies {
     implementation(libs.androidx.camera.extensions)
 
     //tasks vision
-    implementation (libs.tasks.vision)
+    implementation(libs.tasks.vision)
+
+    //splash
+    implementation(libs.androidx.core.splashscreen)
 
 }
 
