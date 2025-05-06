@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +35,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.achint.mangaface.R
 import com.achint.mangaface.domain.model.MangaModel
-import com.achint.mangaface.ui.components.Toolbar
 
 @Composable
 fun MangaScreenRoot(
@@ -81,54 +79,49 @@ fun MangaScreen(
     mangas: LazyPagingItems<MangaModel>,
     navigateToMangaDetail: (String) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            Toolbar(title = "Manga")
-        }
-    ) { innerPadding ->
-        val context = LocalContext.current
-        LaunchedEffect(mangas.loadState) {
-            if (mangas.loadState.refresh is LoadState.Error) {
-                val error = (mangas.loadState.refresh as LoadState.Error).error
-                Toast.makeText(context, "Error: ${error.localizedMessage}", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(innerPadding)
-        ) {
-            if (mangas.loadState.refresh is LoadState.Loading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(8.dp)
-                ) {
-                    items(mangas.itemCount) { index ->
-                        val manga = mangas[index]
-                        if (manga != null) {
-                            MangaGridItem(onClick = {
-                                navigateToMangaDetail(
-                                    manga.id
-                                )
-                            }, mangaModel = manga)
-                        }
+    val context = LocalContext.current
+    LaunchedEffect(mangas.loadState) {
+        if (mangas.loadState.refresh is LoadState.Error) {
+            val error = (mangas.loadState.refresh as LoadState.Error).error
+            Toast.makeText(context, "Error: ${error.localizedMessage}", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        if (mangas.loadState.refresh is LoadState.Loading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                items(mangas.itemCount) { index ->
+                    val manga = mangas[index]
+                    if (manga != null) {
+                        MangaGridItem(onClick = {
+                            navigateToMangaDetail(
+                                manga.id
+                            )
+                        }, mangaModel = manga)
                     }
-                    item {
-                        if (mangas.loadState.append is LoadState.Loading) {
-                            CircularProgressIndicator()
-                        }
+                }
+                item {
+                    if (mangas.loadState.append is LoadState.Loading) {
+                        CircularProgressIndicator()
                     }
                 }
             }
         }
     }
+
 }
 
 

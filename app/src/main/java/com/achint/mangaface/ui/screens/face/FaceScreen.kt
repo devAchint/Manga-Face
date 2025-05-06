@@ -3,7 +3,6 @@
 package com.achint.mangaface.ui.screens.face
 
 import android.content.Context
-import android.graphics.Rect
 import android.graphics.RectF
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -21,7 +20,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +36,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.achint.mangaface.ui.components.Toolbar
 import com.achint.mangaface.utils.FaceDetectorHelper
 import com.achint.mangaface.utils.PermissionManager
 import java.util.concurrent.Executors
@@ -63,7 +60,7 @@ fun Overlay(faceBounds: RectF?) {
             boxTop + boxHeight
         )
         Log.d("MYDEBUG", "box $boundingBox")
-        if (faceBounds == null){
+        if (faceBounds == null) {
             drawRect(
                 color = Color.Red,
                 topLeft = Offset(boundingBox.left, boundingBox.top),
@@ -175,27 +172,20 @@ fun FaceScreen(modifier: Modifier = Modifier) {
 
         }
     }
-    Scaffold(
-        topBar = {
-            Toolbar(title = "Face Recognition")
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    innerPadding
-                )
-        ) {
-            if (hasCameraPermission) {
-                val controller = remember {
-                    LifecycleCameraController(context)
-                }
-                CameraPreview(faceDetector)
-                Overlay(faceBounds.value)
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        if (hasCameraPermission) {
+            val controller = remember {
+                LifecycleCameraController(context)
             }
+            CameraPreview(faceDetector)
+            Overlay(faceBounds.value)
         }
     }
+
 
 }
 

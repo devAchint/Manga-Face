@@ -1,8 +1,6 @@
 package com.achint.mangaface.ui.screens.signin
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -87,57 +84,61 @@ fun SignInScreen(
     var passwordVisible by rememberSaveable {
         mutableStateOf(false)
     }
-    Scaffold { innerPadding ->
-        val context = LocalContext.current
-        Column(
+
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(R.drawable.logo), contentDescription = null,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(R.drawable.logo), contentDescription = null,
-                modifier = Modifier
-                    .padding(top = 80.dp)
-                    .size(72.dp)
-                    .clip(RoundedCornerShape(20.dp))
-            )
-            Spacer(modifier = Modifier.height(48.dp))
-            Text(text = "Login", fontSize = 32.sp, fontFamily = nunFontFamily, fontWeight = FontWeight.Medium)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Enter your email and password", color = LightTextColor)
-            Spacer(modifier = Modifier.height(20.dp))
-            InputField(
-                text = authUiState.email,
-                placeholder = "Enter email",
-                onValueChange = onEmailChange,
-                icon = Icons.Filled.Email,
-                error = authUiState.isValidEmail?.not()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            PasswordField(
-                text = authUiState.password,
-                placeholder = "Enter password",
-                onValueChange = onPasswordChange,
-                passwordVisible = passwordVisible,
-                error = authUiState.isValidPassword?.not(),
-                passwordVisibleChange = {
-                    passwordVisible = it
-                }
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Forget Password!",
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.End
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            LoadingButton(text = "Sign In", isLoading = authUiState.isLoading) {
-                signIn()
+                .padding(top = 80.dp)
+                .size(72.dp)
+                .clip(RoundedCornerShape(20.dp))
+        )
+        Spacer(modifier = Modifier.height(48.dp))
+        Text(
+            text = "Login",
+            fontSize = 32.sp,
+            fontFamily = nunFontFamily,
+            fontWeight = FontWeight.Medium
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Enter your email and password", color = LightTextColor)
+        Spacer(modifier = Modifier.height(20.dp))
+        InputField(
+            text = authUiState.email,
+            placeholder = "Enter email",
+            onValueChange = onEmailChange,
+            icon = Icons.Filled.Email,
+            error = authUiState.isValidEmail?.not()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        PasswordField(
+            text = authUiState.password,
+            placeholder = "Enter password",
+            onValueChange = onPasswordChange,
+            passwordVisible = passwordVisible,
+            error = authUiState.isValidPassword?.not(),
+            passwordVisibleChange = {
+                passwordVisible = it
             }
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "Forget Password!",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.End
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        LoadingButton(text = "Sign In", isLoading = authUiState.isLoading) {
+            signIn()
         }
     }
+
 }
 
 @Preview(showSystemUi = true, showBackground = true)
