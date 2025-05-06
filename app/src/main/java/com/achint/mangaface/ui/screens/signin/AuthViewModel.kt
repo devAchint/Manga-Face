@@ -71,7 +71,6 @@ class AuthViewModel @Inject constructor(private val usersRepository: UsersReposi
             }
             if (authUiState.value.isValidEmail == true && authUiState.value.isValidPassword == true) {
                 _authUiState.update { it.copy(isLoading = true) }
-                delay(5000)
                 val isUserAlreadyExists =
                     usersRepository.isUserAlreadyExists(authUiState.value.email)
                 if (isUserAlreadyExists) {

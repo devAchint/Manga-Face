@@ -1,10 +1,8 @@
-package com.achint.mangaface
+package com.achint.mangaface.ui.screens.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.achint.mangaface.domain.repository.UsersRepository
-import com.achint.mangaface.ui.screens.signin.AuthUiState
-import com.achint.mangaface.ui.screens.signin.SignInStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

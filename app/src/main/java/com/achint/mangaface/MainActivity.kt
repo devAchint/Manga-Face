@@ -1,6 +1,5 @@
 package com.achint.mangaface
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,6 +30,7 @@ import com.achint.mangaface.ui.components.Toolbar
 import com.achint.mangaface.ui.navigation.AppNavHost
 import com.achint.mangaface.ui.navigation.Face
 import com.achint.mangaface.ui.navigation.Manga
+import com.achint.mangaface.ui.screens.signin.UserViewModel
 import com.achint.mangaface.ui.theme.LightTextColor
 import com.achint.mangaface.ui.theme.MangaFaceTheme
 import com.achint.mangaface.ui.theme.PrimaryColor
@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: UserViewModel by viewModels()
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val splashScreen = installSplashScreen()

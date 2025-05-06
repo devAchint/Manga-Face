@@ -1,5 +1,6 @@
-package com.achint.mangaface.ui.components
+package com.achint.mangaface.ui.screens.manga
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.achint.mangaface.domain.model.MangaModel
+import com.achint.mangaface.ui.theme.LightTextColor
 import com.achint.mangaface.ui.theme.nunFontFamily
 
 @Composable
@@ -32,8 +34,9 @@ fun MangaGridItem(modifier: Modifier = Modifier, mangaModel: MangaModel, onClick
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
                 .clip(RoundedCornerShape(10.dp))
+                .background(LightTextColor)
+                .height(200.dp)
         )
 
         Text(

@@ -20,7 +20,6 @@ class FaceDetectorHelper(
     var currentDelegate: Int = DELEGATE_CPU,
     var runningMode: RunningMode = RunningMode.LIVE_STREAM,
     val context: Context,
-    // The listener is only used when running in RunningMode.LIVE_STREAM
     var faceDetectorListener: DetectorListener? = null
 ) {
 
@@ -194,42 +193,6 @@ class FaceDetectorHelper(
         faceDetectorListener?.onError(
             error.message ?: "An unknown error has occurred"
         )
-    }
-
-    // Accepted a Bitmap and runs face detection inference on it to return results back
-    // to the caller
-    fun detectImage(image: Bitmap): ResultBundle? {
-
-        if (runningMode != RunningMode.IMAGE) {
-            throw IllegalArgumentException(
-                "Attempting to call detectImage" +
-                        " while not using RunningMode.IMAGE"
-            )
-        }
-
-        if (faceDetector == null) return null
-
-        // Inference time is the difference between the system time at the start and finish of the
-        // process
-        val startTime = SystemClock.uptimeMillis()
-
-        // Convert the input Bitmap face to an MPImage face to run inference
-        val mpImage = BitmapImageBuilder(image).build()
-
-        // Run face detection using MediaPipe Face Detector API
-        faceDetector?.detect(mpImage)?.also { detectionResult ->
-            val inferenceTimeMs = SystemClock.uptimeMillis() - startTime
-            return ResultBundle(
-                listOf(detectionResult),
-                inferenceTimeMs,
-                image.height,
-                image.width
-            )
-        }
-
-        // If faceDetector?.detect() returns null, this is likely an error. Returning null
-        // to indicate this.
-        return null
     }
 
     // Wraps results from inference, the time it takes for inference to be performed, and

@@ -72,7 +72,7 @@ fun MangaDetailScreen(
                 contentDescription = manga.title,
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.TopCenter,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().background(LightTextColor)
             )
 
             IconButton(
