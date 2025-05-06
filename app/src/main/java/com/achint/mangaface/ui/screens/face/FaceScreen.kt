@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,10 +30,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.achint.mangaface.ui.components.LoadingButton
 import com.achint.mangaface.ui.theme.nunFontFamily
 import com.achint.mangaface.utils.FaceDetectorHelper
 import com.achint.mangaface.utils.PermissionManager
+import com.achint.mangaface.utils.isFaceInsideReferenceBox
 
 
 fun createFaceDetector(
@@ -43,15 +48,15 @@ fun createFaceDetector(
         context = context,
         faceDetectorListener = object : FaceDetectorHelper.DetectorListener {
             override fun onError(error: String, errorCode: Int) {
-                Log.d("MYDEBUG", "$error")
+                Log.d("MYDEBUG", error)
             }
 
             override fun onResults(resultBundle: FaceDetectorHelper.ResultBundle) {
                 Log.d("FaceDetector", " on results${resultBundle.results}")
                 onResults(resultBundle)
             }
-
-        })
+        }
+    )
 }
 
 @Composable
@@ -63,6 +68,8 @@ fun FaceScreenRoot(modifier: Modifier = Modifier) {
 fun FaceScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val activity = context as? Activity
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     var hasCameraPermission by remember {
         mutableStateOf(PermissionManager.hasCameraPermission(context))
     }
@@ -96,6 +103,7 @@ fun FaceScreen(modifier: Modifier = Modifier) {
     }
 
 
+
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -117,6 +125,28 @@ fun FaceScreen(modifier: Modifier = Modifier) {
                     canvasHeight = canvasHeight
                 )
             })
+        }
+
+        DisposableEffect(lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                when (event) {
+                    Lifecycle.Event.ON_RESUME -> {
+                        faceDetector.setupFaceDetector()
+                    }
+
+                    Lifecycle.Event.ON_PAUSE -> {
+                        faceDetector.clearFaceDetector()
+                    }
+
+                    else -> {}
+                }
+            }
+
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+                faceDetector.clearFaceDetector()
+            }
         }
 
         if (hasCameraPermission) {

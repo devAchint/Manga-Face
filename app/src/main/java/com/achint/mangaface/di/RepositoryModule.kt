@@ -1,8 +1,6 @@
 package com.achint.mangaface.di
 
-import com.achint.mangaface.data.repository.MangaRepositoryImpl
 import com.achint.mangaface.data.repository.UsersRepositoryImpl
-import com.achint.mangaface.domain.repository.MangaRepository
 import com.achint.mangaface.domain.repository.UsersRepository
 import dagger.Binds
 import dagger.Module
@@ -20,9 +18,4 @@ abstract class RepositoryModule {
         impl: UsersRepositoryImpl
     ): UsersRepository
 
-    @Binds
-    @Singleton
-    abstract fun bindsMangaRepository(
-        impl:MangaRepositoryImpl
-    ):MangaRepository
 }

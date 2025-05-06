@@ -6,7 +6,6 @@ import com.achint.mangaface.domain.repository.UsersRepository
 import com.achint.mangaface.utils.isValidEmail
 import com.achint.mangaface.utils.isValidPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -65,20 +64,27 @@ class AuthViewModel @Inject constructor(private val usersRepository: UsersReposi
         viewModelScope.launch {
             _authUiState.update {
                 it.copy(
+                    isLoading = true,
                     isValidEmail = authUiState.value.email.isValidEmail(),
                     isValidPassword = authUiState.value.password.isValidPassword()
                 )
             }
-            if (authUiState.value.isValidEmail == true && authUiState.value.isValidPassword == true) {
-                _authUiState.update { it.copy(isLoading = true) }
-                val isUserAlreadyExists =
-                    usersRepository.isUserAlreadyExists(authUiState.value.email)
-                if (isUserAlreadyExists) {
-                    signIn()
-                } else {
-                    signUp()
+            if (authUiState.value.isValidPassword == false || authUiState.value.isValidEmail == false) {
+                _authUiState.update {
+                    it.copy(isLoading = false)
                 }
+                return@launch
             }
+
+            val isUserAlreadyExists =
+                usersRepository.isUserAlreadyExists(authUiState.value.email)
+
+            if (isUserAlreadyExists) {
+                signIn()
+            } else {
+                signUp()
+            }
+
         }
     }
 

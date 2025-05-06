@@ -2,6 +2,7 @@ package com.achint.mangaface.ui.screens.signin
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -132,7 +133,12 @@ fun SignInScreen(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "Forget Password!",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    Toast.makeText(context, "Functionality Not Available", Toast.LENGTH_SHORT)
+                        .show()
+                },
             textAlign = TextAlign.End
         )
         Spacer(modifier = Modifier.height(20.dp))

@@ -1,5 +1,6 @@
 package com.achint.mangaface.data.remote
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -8,6 +9,8 @@ import androidx.room.withTransaction
 import com.achint.mangaface.data.local.MangaEntity
 import com.achint.mangaface.data.local.MyAppDatabase
 import com.achint.mangaface.data.mappers.asMangaEntity
+import retrofit2.HttpException
+import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
 class MangaRemoteMediator(
@@ -25,9 +28,9 @@ class MangaRemoteMediator(
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
                     val lastItem = state.lastItemOrNull()
-                    if (lastItem==null){
+                    if (lastItem == null) {
                         1
-                    }else{
+                    } else {
                         val currentPage = (lastItem.id.toInt() / state.config.pageSize)
                         currentPage + 1
                     }
@@ -51,8 +54,15 @@ class MangaRemoteMediator(
             MediatorResult.Success(
                 endOfPaginationReached = mangaList.isEmpty()
             )
+        } catch (io: IOException) {
+            Log.e("RemoteMediator", "Network error", io)
+            return MediatorResult.Error(io)
+        } catch (http: HttpException) {
+            Log.e("RemoteMediator", "HTTP error", http)
+            return MediatorResult.Error(http)
         } catch (e: Exception) {
-            MediatorResult.Error(e)
+            Log.e("RemoteMediator", "Unexpected error", e)
+            return MediatorResult.Error(e)
         }
     }
 }

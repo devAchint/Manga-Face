@@ -1,5 +1,6 @@
 package com.achint.mangaface.ui.screens.mangaDetail
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -58,7 +60,7 @@ fun MangaDetailScreen(
     manga: MangaModel,
     onBackPressed: () -> Unit = {}
 ) {
-
+    val context = LocalContext.current
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -72,7 +74,9 @@ fun MangaDetailScreen(
                 contentDescription = manga.title,
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.TopCenter,
-                modifier = Modifier.fillMaxSize().background(LightTextColor)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(LightTextColor)
             )
 
             IconButton(
@@ -159,7 +163,9 @@ fun MangaDetailScreen(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            LoadingButton(text = "Read Now")
+            LoadingButton(text = "Read Now") {
+                Toast.makeText(context, "Functionality Not Available", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

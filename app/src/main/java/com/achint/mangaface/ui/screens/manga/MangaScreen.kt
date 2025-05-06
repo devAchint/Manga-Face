@@ -22,6 +22,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.achint.mangaface.domain.model.MangaModel
 import com.achint.mangaface.ui.theme.PrimaryColor
+import com.achint.mangaface.utils.mangaErrorMessages
 
 @Composable
 fun MangaScreenRoot(
@@ -47,7 +48,7 @@ fun MangaScreen(
     LaunchedEffect(mangas.loadState) {
         if (mangas.loadState.refresh is LoadState.Error) {
             val error = (mangas.loadState.refresh as LoadState.Error).error
-            Toast.makeText(context, "Error: ${error.localizedMessage}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, mangaErrorMessages(error), Toast.LENGTH_SHORT).show()
         }
     }
 

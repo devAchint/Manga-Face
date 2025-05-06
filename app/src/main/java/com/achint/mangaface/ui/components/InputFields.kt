@@ -8,9 +8,13 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -20,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.achint.mangaface.R
 import com.achint.mangaface.ui.theme.ErrorColor
 import com.achint.mangaface.ui.theme.LightTextColor
+import com.achint.mangaface.ui.theme.PrimaryColor
 
 @Composable
 fun InputField(
@@ -42,10 +47,15 @@ fun InputField(
             leadingIcon = {
                 Icon(imageVector = icon, contentDescription = "Email")
             },
-            singleLine = true
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = PrimaryColor,
+                unfocusedBorderColor = Color.Black,
+                cursorColor = Color.Black
+            )
         )
         if (error == true) {
-            Text(text = "Email is not valid", color = ErrorColor, fontSize = 12.sp)
+            Text(text = "That's not a valid email", color = ErrorColor, fontSize = 12.sp)
         }
     }
 
@@ -70,6 +80,11 @@ fun PasswordField(
             label = {
                 Text(text = placeholder, color = LightTextColor)
             },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = PrimaryColor,
+                unfocusedBorderColor = Color.Black,
+                cursorColor = Color.Black
+            ),
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -86,7 +101,7 @@ fun PasswordField(
             },
         )
         if (error == true) {
-            Text(text = "Password is not valid", color = ErrorColor, fontSize = 12.sp)
+            Text(text = "The password must be at least 6 characters", color = ErrorColor, fontSize = 12.sp)
         }
     }
 }
