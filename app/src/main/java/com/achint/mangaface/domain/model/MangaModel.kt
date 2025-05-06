@@ -1,10 +1,12 @@
 package com.achint.mangaface.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class MangaModel(
     val authors: List<String>,
-    val create_at: Long,
     val genres: List<String>,
-    val id: String,
+    val id: Long,
     val nsfw: Boolean,
     val status: String,
     val sub_title: String,
@@ -13,5 +15,4 @@ data class MangaModel(
     val title: String,
     val total_chapter: Int,
     val type: String,
-    val update_at: Long
 )

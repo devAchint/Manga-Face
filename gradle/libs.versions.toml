@@ -1,7 +1,8 @@
 [versions]
 agp = "8.8.0"
+coilCompose = "2.4.0"
 cameraView = "1.4.2"
-coilCompose = "2.6.0"
+
 coilNetworkOkhttp = "3.1.0"
 converterGson = "2.11.0"
 coreSplashscreen = "1.0.1"
@@ -40,7 +41,6 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilNetworkOkhttp" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
@@ -61,6 +61,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "tasksVision" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

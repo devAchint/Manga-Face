@@ -3,22 +3,17 @@
 package com.achint.mangaface.ui.screens.face
 
 import android.content.Context
-import android.graphics.RectF
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,12 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -40,60 +30,6 @@ import com.achint.mangaface.utils.FaceDetectorHelper
 import com.achint.mangaface.utils.PermissionManager
 import java.util.concurrent.Executors
 
-@Composable
-fun Overlay(faceBounds: RectF?) {
-    Log.d("MYDEBUG", "face $faceBounds")
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        val canvasWidth = size.width
-        val canvasHeight = size.height
-
-        // Define bounding box in center 40% area
-        val boxWidth = canvasWidth * 0.8f
-        val boxHeight = canvasHeight * 0.6f
-        val boxLeft = (canvasWidth - boxWidth) / 2
-        val boxTop = (canvasHeight - boxHeight) / 2
-
-        val boundingBox = RectF(
-            boxLeft,
-            boxTop,
-            boxLeft + boxWidth,
-            boxTop + boxHeight
-        )
-        Log.d("MYDEBUG", "box $boundingBox")
-        if (faceBounds == null) {
-            drawRect(
-                color = Color.Red,
-                topLeft = Offset(boundingBox.left, boundingBox.top),
-                size = Size(boundingBox.width(), boundingBox.height()),
-                style = Stroke(width = 3f)
-            )
-            return@Canvas
-        }
-
-        val isInside = boundingBox.left <= faceBounds.left &&
-                boundingBox.top <= faceBounds.top &&
-                boundingBox.right >= faceBounds.right &&
-                boundingBox.bottom >= faceBounds.bottom
-
-        val color = if (isInside) Color.Green else Color.Red
-
-        drawRect(
-            color = color,
-            topLeft = Offset(boundingBox.left, boundingBox.top),
-            size = Size(boundingBox.width(), boundingBox.height()),
-            style = Stroke(width = 3f)
-        )
-
-        drawRect(
-            color = Color.Blue,
-            topLeft = Offset(faceBounds.left, faceBounds.top),
-            size = Size(faceBounds.width(), faceBounds.height()),
-            style = Stroke(width = 10f)
-        )
-
-    }
-
-}
 
 fun createFaceDetector(
     context: Context,
@@ -137,39 +73,10 @@ fun FaceScreen(modifier: Modifier = Modifier) {
             permissionLauncher.launch(PermissionManager.CAMERA_PERMISSION)
         }
     }
-    var faceBounds = remember { mutableStateOf<RectF?>(null) }
+    var resultBundle = remember { mutableStateOf<FaceDetectorHelper.ResultBundle?>(null) }
     val faceDetector = remember {
         createFaceDetector(context) {
-            Log.d("MYDEBUG", "$it")
-            if (it.results[0].detections().isEmpty()) {
-                faceBounds.value = null
-                return@createFaceDetector
-            }
-            for (detection in it.results[0].detections()) {
-                val box = detection.boundingBox()
-
-                val imageWidth = 480f
-                val imageHeight = 640f
-
-                val canvasWidth = context.resources.displayMetrics.widthPixels.toFloat()
-                val canvasHeight = context.resources.displayMetrics.heightPixels.toFloat()
-
-                // No flipping
-                val mappedLeft = box.left / imageWidth * canvasWidth
-                val mappedRight = box.right / imageWidth * canvasWidth
-
-                val mappedTop = box.top / imageHeight * canvasHeight
-                val mappedBottom = box.bottom / imageHeight * canvasHeight
-
-                faceBounds.value = RectF(
-                    mappedLeft.toFloat(),
-                    mappedTop,
-                    mappedRight,
-                    mappedBottom
-                )
-            }
-
-
+            resultBundle.value = it
         }
     }
 
@@ -178,18 +85,26 @@ fun FaceScreen(modifier: Modifier = Modifier) {
             .fillMaxSize()
     ) {
         if (hasCameraPermission) {
-            val controller = remember {
-                LifecycleCameraController(context)
-            }
             CameraPreview(faceDetector)
-            Overlay(faceBounds.value)
+
+            resultBundle.value?.let {
+                val detectionResult = it.results[0]
+
+                Overlay(
+                    detectionResults = detectionResult,
+                    imageWidth = it.inputImageWidth,
+                    imageHeight = it.inputImageHeight,
+                )
+            }
+
+
         }
     }
 
-
 }
 
-@androidx.annotation.OptIn(ExperimentalGetImage::class)
+
+
 @Composable
 fun CameraPreview(faceDetector: FaceDetectorHelper) {
     val context = LocalContext.current
@@ -197,8 +112,10 @@ fun CameraPreview(faceDetector: FaceDetectorHelper) {
 
 
     AndroidView(
+        modifier = Modifier.fillMaxSize(),
         factory = { androidContext ->
             val previewView = PreviewView(androidContext)
+            previewView.scaleType = PreviewView.ScaleType.FIT_START
 
             val cameraProviderFuture = ProcessCameraProvider.getInstance(androidContext)
             cameraProviderFuture.addListener({
@@ -210,14 +127,13 @@ fun CameraPreview(faceDetector: FaceDetectorHelper) {
                         it.surfaceProvider = previewView.surfaceProvider
                     }
 
-//                val analysis = ImageAnalysis.Builder()
-//                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-//                    .build()
+
                 val backgroundExecutor = Executors.newSingleThreadExecutor()
 
                 val imageAnalyzer =
                     ImageAnalysis.Builder()
                         .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+                        .setTargetRotation(previewView.display.rotation)
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .setOutputImageFormat(OUTPUT_IMAGE_FORMAT_RGBA_8888)
                         .build()
@@ -229,41 +145,8 @@ fun CameraPreview(faceDetector: FaceDetectorHelper) {
                             )
                         }
 
-//                analysis.setAnalyzer(ContextCompat.getMainExecutor(androidContext)) { imageProxy ->
-//                    val image = imageProxy.image
-//
-//                    val bitmapBuffer =
-//                        Bitmap.createBitmap(
-//                            imageProxy.width,
-//                            imageProxy.height,
-//                            Bitmap.Config.ARGB_8888
-//                        )
-////                    imageProxy.use { bitmapBuffer.copyPixelsFromBuffer(imageProxy.planes[0].buffer) }
-////                    imageProxy.close()
-//                    val matrix = Matrix().apply {
-//                        // Rotate the frame received from the camera to be in the same direction as it'll be shown
-//                        postRotate(imageProxy.imageInfo.rotationDegrees.toFloat())
-//
-//                        // flip image if user use front camera
-//
-//                        postScale(
-//                            -1f,
-//                            1f,
-//                            imageProxy.width.toFloat(),
-//                            imageProxy.height.toFloat()
-//                        )
-//
-//                    }
-//                    val rotatedBitmap = Bitmap.createBitmap(
-//                        bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height,
-//                        matrix, true
-//                    )
-//                    val mpImage = BitmapImageBuilder(rotatedBitmap).build()
-//
-//                     faceDetector.detectLivestreamFrame(imageProxy)
-//                }
-
-                val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                val cameraSelector = CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT).build()
 
                 try {
                     cameraProvider.unbindAll()
@@ -282,11 +165,4 @@ fun CameraPreview(faceDetector: FaceDetectorHelper) {
             previewView
         }
     )
-}
-
-
-@Preview
-@Composable
-fun FaceScreenPrev() {
-    FaceScreen()
 }

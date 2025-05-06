@@ -1,6 +1,5 @@
 package com.achint.mangaface.ui.screens.mangaDetail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,12 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.achint.mangaface.R
+import coil.compose.AsyncImage
 import com.achint.mangaface.domain.model.MangaModel
 import com.achint.mangaface.ui.components.LoadingButton
 import com.achint.mangaface.ui.theme.LightTextColor
@@ -39,47 +40,58 @@ import com.achint.mangaface.ui.theme.nunFontFamily
 import com.achint.mangaface.utils.toTitleCase
 
 @Composable
-fun MangaDetailScreenRoot(modifier: Modifier = Modifier) {
-    val manga = MangaModel(
-        id = "65a52ea8f64a55128b487e1b",
-        title = " A World of Gold to You",
-        sub_title = "",
-        status = "ongoing",
-        thumb = "https://usc1.contabostorage.com/scraper/mangas/65a52ea8f64a55128b487e1b/thumb.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=c10e9464b360c31ce8abea9b266076f6%2F20250505%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250505T144447Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=b715d999ff13d8d3b677e33cf415c5d34188828a6386a0767f5c8b41909c0675",
-        summary = "Once upon a time, the world had been divided into the Moon Kingdom, inhabited by humans, and the Sun Kingdom, inhabited by demons. Estelle, a knight of the Moon Kingdom, loses her family to an ambush from the demons and is sentenced to life in exile after becoming entangled with a mysterious demon child. To survive, she sets out to a mysterious tower in the north with her companions. A timid knight, a slave boy, and a shadow who was once the Demon King. This is an alluring story about three people embarking on an adventure to find their true selves.\n\n",
-        authors = listOf(""),
-        genres = listOf("Action", "Fantasy", "Manga", "Adventure", "Seinen", "Manhwa", "Mature"),
-        nsfw = true,
-        type = "korea",
-        total_chapter = 0,
-        create_at = 1705324200839,
-        update_at = 1705324333619
+fun MangaDetailScreenRoot(
+    modifier: Modifier = Modifier,
+    manga: MangaModel,
+    onBackPressed: () -> Unit = {}
+) {
+    MangaDetailScreen(
+        modifier = modifier,
+        manga = manga,
+        onBackPressed = onBackPressed
     )
-
-    MangaDetailScreen(manga = manga)
-
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MangaDetailScreen(
-    modifier: Modifier = Modifier, manga: MangaModel
+    modifier: Modifier = Modifier,
+    manga: MangaModel,
+    onBackPressed: () -> Unit = {}
 ) {
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(
-                R.drawable.thumb
-            ), contentDescription = null,
-            contentScale = ContentScale.Crop,
-            alignment = Alignment.TopCenter,
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(280.dp)
-        )
+        ) {
+            AsyncImage(
+                model = manga.thumb,
+                contentDescription = manga.title,
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.TopCenter,
+                modifier = Modifier.fillMaxSize()
+            )
+
+            IconButton(
+                onClick = onBackPressed,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(top = 16.dp, start = 16.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
+                    .size(40.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
+
         Column(
             modifier = Modifier
                 .offset(y = (-16).dp)
@@ -103,7 +115,8 @@ fun MangaDetailScreen(
                 LazyRow {
                     items(manga.genres) {
                         Text(
-                            text = it, modifier = Modifier
+                            text = it,
+                            modifier = Modifier
                                 .clip(RoundedCornerShape(20.dp))
                                 .background(
                                     Color(0xfffafafa)

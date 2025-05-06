@@ -1,6 +1,7 @@
 package com.achint.mangaface.di
 
 import android.util.Log
+import com.achint.mangaface.BuildConfig
 import com.achint.mangaface.data.remote.ApiInterface
 import dagger.Module
 import dagger.Provides
@@ -22,9 +23,8 @@ class NetworkModule() {
         val headerInterceptor = Interceptor { chain ->
             Log.d("MYDEBUG", "${chain.request().url}")
             val request = chain.request().newBuilder()
-                //23faf46033msh6c913195d8814a8p1c67cfjsnb48067f6db09
-                //cb85ce1a1cmsh588514d9f0c2206p17bc57jsnc7feb5b73b69
-                .addHeader("x-rapidapi-key", "23faf46033msh6c913195d8814a8p1c67cfjsnb48067f6db09")
+                .addHeader("x-rapidapi-key", BuildConfig.API_KEY)
+                .addHeader("x-rapidapi-host", "mangaverse-api.p.rapidapi.com")
                 .build()
             chain.proceed(request)
         }
@@ -37,7 +37,7 @@ class NetworkModule() {
         okHttpClient: OkHttpClient
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://mangaverse-api.p.rapidapi.com/")
+            .baseUrl(BuildConfig.API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

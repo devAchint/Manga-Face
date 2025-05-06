@@ -24,7 +24,13 @@ class MangaRemoteMediator(
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    100
+                    val lastItem = state.lastItemOrNull()
+                    if (lastItem==null){
+                        1
+                    }else{
+                        val currentPage = (lastItem.id.toInt() / state.config.pageSize)
+                        currentPage + 1
+                    }
                 }
             }
             val response = apiInterface.fetchManga(loadKey)
@@ -33,10 +39,13 @@ class MangaRemoteMediator(
             }
             val mangaList = response.body()?.mangaList ?: emptyList()
             db.withTransaction {
+                var currentId = 1L
                 if (loadType == LoadType.REFRESH) {
                     db.mangaDao().clearAll()
+                } else {
+                    currentId = (db.mangaDao().getLastManga()?.id ?: 0) + 1
                 }
-                val mangaEntities = mangaList.map { it.asMangaEntity() }
+                val mangaEntities = mangaList.map { it.asMangaEntity(currentId++) }
                 db.mangaDao().upsertAll(mangaEntities)
             }
             MediatorResult.Success(

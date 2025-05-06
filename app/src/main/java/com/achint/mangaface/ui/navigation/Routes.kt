@@ -1,5 +1,6 @@
 package com.achint.mangaface.ui.navigation
 
+import com.achint.mangaface.domain.model.MangaModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,7 +10,7 @@ object SignIn
 object Manga
 
 @Serializable
-object MangaDetail
+data class MangaDetail(val mangaModel: MangaModel)
 
 @Serializable
 object Face

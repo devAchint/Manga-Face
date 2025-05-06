@@ -1,5 +1,6 @@
 package com.achint.mangaface.ui.screens.signin
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,7 +53,6 @@ fun SignInScreenRoot(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
     modifier: Modifier = Modifier,
@@ -63,29 +62,32 @@ fun SignInScreen(
     navigateToHome: () -> Unit = {},
     signIn: () -> Unit = { }
 ) {
+    val context = LocalContext.current
+
     LaunchedEffect(authUiState.signInState) {
-        when (authUiState.signInState) {
-            SignInStates.InvalidCredentials -> {
+        authUiState.signInState?.let {
+            when (it) {
+                SignInStates.InvalidCredentials -> {
+                    Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                }
 
+                SignInStates.Success -> {
+                    Toast.makeText(context, "Successfully Signed In", Toast.LENGTH_SHORT).show()
+                    navigateToHome()
+                }
+
+                SignInStates.Fail -> {
+                    Toast.makeText(context, "Something Went Wrong", Toast.LENGTH_SHORT).show()
+                }
             }
-
-            SignInStates.Success -> {
-                //navigateToHome()
-            }
-
-            SignInStates.Fail -> {
-
-            }
-
-            null -> {}
         }
+
     }
 
     var passwordVisible by rememberSaveable {
         mutableStateOf(false)
     }
 
-    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()

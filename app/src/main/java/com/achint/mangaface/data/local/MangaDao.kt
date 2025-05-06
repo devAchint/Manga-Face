@@ -16,4 +16,7 @@ interface MangaDao {
 
     @Query("Delete From manga")
     suspend fun clearAll()
+
+    @Query("SELECT * FROM manga ORDER BY id DESC LIMIT 1")
+    suspend fun getLastManga(): MangaEntity?
 }

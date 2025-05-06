@@ -106,7 +106,6 @@ class FaceDetectorHelper(
         return faceDetector == null
     }
 
-
     // Runs face detection on live streaming cameras frame-by-frame and returns the results
     // asynchronously to the caller.
     fun detectLivestreamFrame(imageProxy: ImageProxy) {

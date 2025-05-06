@@ -12,6 +12,6 @@ class MangaRepositoryImpl @Inject constructor(private val apiInterface: ApiInter
 
     override suspend fun fetchManga(): List<MangaModel> {
         val response = apiInterface.fetchManga(1)
-        return response.body()?.mangaList?.map { it.asMangaEntity().asManga() } ?: emptyList()
+        return response.body()?.mangaList?.map { it.asMangaEntity(1).asManga() } ?: emptyList()
     }
 }
