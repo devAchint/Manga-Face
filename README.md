@@ -77,7 +77,6 @@ To detect face in realtime.
    API_URL=https://mangaverse-api.p.rapidapi.com/
    ```
 
-Here’s a **"Download APK"** section you can add to your GitHub `README.md` or anywhere in your repository documentation:
 
 
 ### 📦 Download APK
