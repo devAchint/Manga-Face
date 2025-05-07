@@ -21,7 +21,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.achint.mangaface.domain.model.MangaModel
-import com.achint.mangaface.ui.theme.PrimaryColor
+import com.achint.mangaface.ui.theme.Background
 import com.achint.mangaface.utils.mangaErrorMessages
 
 @Composable
@@ -55,16 +55,16 @@ fun MangaScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Background)
     ) {
         if (mangas.loadState.refresh is LoadState.Loading) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center),
-                color = PrimaryColor
+                color = Color.White
             )
         } else {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2), contentPadding = PaddingValues(8.dp)
+                columns = GridCells.Fixed(3), contentPadding = PaddingValues(4.dp)
             ) {
                 items(mangas.itemCount) { index ->
                     val manga = mangas[index]
@@ -81,7 +81,7 @@ fun MangaScreen(
                         if (mangas.loadState.append is LoadState.Loading) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(48.dp),
-                                color = PrimaryColor
+                                color = Color.White
                             )
                         }
                     }

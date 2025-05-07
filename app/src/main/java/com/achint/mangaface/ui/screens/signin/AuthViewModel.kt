@@ -46,7 +46,8 @@ class AuthViewModel @Inject constructor(private val usersRepository: UsersReposi
     fun setEmail(email: String) {
         _authUiState.update {
             it.copy(
-                email = email
+                email = email,
+                isValidEmail = email.isValidEmail()
             )
         }
     }
@@ -54,7 +55,8 @@ class AuthViewModel @Inject constructor(private val usersRepository: UsersReposi
     fun setPassword(password: String) {
         _authUiState.update {
             it.copy(
-                password = password
+                password = password,
+                isValidPassword = password.isValidPassword()
             )
         }
     }

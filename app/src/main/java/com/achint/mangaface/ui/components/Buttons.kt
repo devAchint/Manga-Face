@@ -14,24 +14,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.achint.mangaface.ui.theme.PrimaryColor
+import com.achint.mangaface.ui.theme.ButtonColor
 
 @Preview
 @Composable
-fun LoadingButton(
+fun CommonButton(
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
+    isEnabled: Boolean = false,
     text: String = "Button",
     onClick: () -> Unit = {},
 ) {
     Button(
         onClick = onClick,
+        enabled = isEnabled,
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp),
-        shape = RoundedCornerShape(12.dp),
+            .height(40.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = PrimaryColor
+            containerColor = ButtonColor,
+            disabledContainerColor = Color(0xff4a4645)
         )
     ) {
         if (isLoading) {

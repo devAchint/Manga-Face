@@ -18,7 +18,6 @@ import java.util.concurrent.Executors
 
 @Composable
 fun CameraPreview(detectLiveFrame: (imageProxy: ImageProxy) -> Unit) {
-    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
 
@@ -47,7 +46,6 @@ fun CameraPreview(detectLiveFrame: (imageProxy: ImageProxy) -> Unit) {
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .setOutputImageFormat(OUTPUT_IMAGE_FORMAT_RGBA_8888)
                         .build()
-                        // The analyzer can then be assigned to the instance
                         .also {
                             it.setAnalyzer(
                                 backgroundExecutor,

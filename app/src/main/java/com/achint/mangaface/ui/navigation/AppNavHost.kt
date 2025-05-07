@@ -19,7 +19,6 @@ fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     userSignedIn: Boolean,
-    setTitle: (String?) -> Unit,
 ) {
     NavHost(
         modifier = modifier,
@@ -27,7 +26,6 @@ fun AppNavHost(
         startDestination = if (userSignedIn) Manga else SignIn
     ) {
         composable<SignIn> {
-            setTitle(null)
             SignInScreenRoot(
                 navigateToHome = {
                     navController.navigate(Manga)
@@ -36,7 +34,6 @@ fun AppNavHost(
         }
 
         composable<Manga> {
-            setTitle("Manga")
             MangaScreenRoot(
                 navigateToMangaDetail = {
                     navController.navigate(MangaDetail(it))
@@ -48,7 +45,6 @@ fun AppNavHost(
                 typeOf<MangaModel>() to CustomNavType.MangaType
             )
         ) {
-            setTitle(null)
             val arguments = it.toRoute<MangaDetail>()
             MangaDetailScreenRoot(
                 manga = arguments.mangaModel,
@@ -57,7 +53,6 @@ fun AppNavHost(
         }
 
         composable<Face> {
-            setTitle("Face")
             FaceScreenRoot()
         }
     }
