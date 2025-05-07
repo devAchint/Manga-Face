@@ -17,8 +17,8 @@ Manga Face is a feature-rich Android application that leverages modern Android t
 
 |                                                                                                                         |                                                                                                               |                                                                                                                |
 |-------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
-| ![login](https://github.com/user-attachments/assets/990feead-648b-4cc4-84d2-fc9bdc7ff904)                               | ![Manga List](https://github.com/user-attachments/assets/1c4342d4-8ce0-4fec-b36c-df886be2a769)                | ![Manga Detail](https://github.com/user-attachments/assets/2ec78244-9cab-409d-9aef-8f13cbb205db)               |
-| ![Face Inside](https://github.com/user-attachments/assets/3b44491b-cea7-4a2b-b1bd-7433fa4a0702)                         | ![Face Out](https://github.com/user-attachments/assets/98ea8243-99d6-49ec-9b54-4120fbd16c35)                  |                                                                                                                |
+| ![login](https://github.com/user-attachments/assets/a2d855d5-3cce-44ea-a0a9-5a3a09e018ef)                               | ![Manga List](https://github.com/user-attachments/assets/2c9786b5-c7a5-49bb-8dee-c8a890b01a10)                | ![Manga Detail](https://github.com/user-attachments/assets/57ad7425-58c0-44b7-a028-ce4c93464885)               |
+| ![Face Inside](https://github.com/user-attachments/assets/0d9289ab-04a1-40c2-8848-2bb7f4632b9a)                         | ![Face Out](https://github.com/user-attachments/assets/74d82ab9-5471-4d55-8f91-ed26b956ca62)                  |                                                                                                                |
 
 
 
@@ -77,4 +77,11 @@ To detect face in realtime.
    API_URL=https://mangaverse-api.p.rapidapi.com/
    ```
 
+
+
+### 📦 Download APK
+
+Click the link below to download the latest release of the app:
+
+[**Download APK (v1.0.0)**](https://github.com/devAchint/Manga-Face/releases/download/v1.0.0/app-release.apk)
 
